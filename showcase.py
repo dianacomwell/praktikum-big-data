@@ -5,15 +5,6 @@ import plotly.express as px
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
-
-st.write("""
-# Aplikasi Yahoo Finance
-## Data saham
-
-Aplikasi menggunakan streamlit.
-
-""")
-
 ticker_dict = {
     'ANTM.JK': "PT Aneka Tambang Tbk",
     'BMRI.JK': "PT Bank Mandiri (Persero) Tbk",
@@ -27,25 +18,30 @@ ticker_dict = {
     'EXCL.JK': "PT XL Axiata Tbk",
     'GOOGL': "Google",
     'MSFT': "Microsoft",
-    'AAPL': "APPLE"
+    'AAPL': "Apple",
+    'TSLA': "Tesla Inc",
+    'AMZN': "Amazon"
 }
 
-tickerSymbols = sorted(ticker_dict.keys())
+st.write("""
+# Aplikasi Yahoo Finance
+## Data saham
+""")
+
+tickersymbols = sorted(ticker_dict.keys())
 
 ticker = st.selectbox(
-    "Ticker Perusahaan", 
-    options = tickerSymbols
+    "Ticker Perusahaan",
+    options = tickersymbols
 )
 
-st.write(f'Ticker yang terpilih: **{ticker}**')
+st.write(f'Ticker yang terpilih: *{ticker}*')
 
 tickerData = yf.Ticker(ticker)
 
-st.write(type(tickerData))
-
 hari_mundur = st.selectbox(
     "Pilihan rentang hari",
-    options = [7,10,20,30,60,90,365]
+    options = [7, 10, 20, 30, 60, 90, 365]
 )
 
 jumlah_hari = timedelta(days=-int(hari_mundur))
@@ -69,22 +65,22 @@ attributes = st.multiselect(
     default=['Volume', 'Open']
 )
 
-st.write(attributes)
-st.write(type(attributes))
+# st.write(attributes)
 
 st.markdown(f"Lima data pertama")
 st.write(tickerDF.head())
-         
-#st.plotly_chart( px.line(tickerDF.Open))
-#st.plotly_chart( px.line(tickerDF["High"]) )
-         
+
+# st.plotly_chart( px.line(tickerDF.Open))
+# st.plotly_chart( px.line(tickerDF["High"]) )
+
+judul_chart = f'Harga Saham {ticker_dict[ticker]} ({ticker})'
+
 st.plotly_chart(
     px.line(
         tickerDF,
-        title=f'Harga Saham {ticker_dict[ticker]} ({ticker})',
+        title = judul_chart,
         y = attributes
     )
 )
-
 #https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
 
